@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Docker Complete Guide</title>
+    <link rel="preload" href="styles.css" as="style"/>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🐳 Docker Complete Guide</h1>
+        <p class="subtitle">Essential commands for Docker development & maintenance</p>
+    </div>
+
+    <div class="nav-tabs">
+        <div class="nav-tab active" data-tab="operations">🚀 Operations</div>
+        <div class="nav-tab" data-tab="monitoring">📊 Monitoring</div>
+        <div class="nav-tab" data-tab="cleanup">🧹 Cleanup</div>
+        <div class="nav-tab" data-tab="best-practices">💡 Best Practices</div>
+    </div>
+
+    <!-- Operations Section -->
+    <div id="operations" class="section active">
+        <h2 class="section-title">Core Operations</h2>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">▶️</div>
+                <div class="command-title">Start the Project</div>
+                <span class="command-badge success">Essential</span>
+            </div>
+            <p class="command-description">Build and start all services defined in docker-compose.yml</p>
+            <div class="code-block"><code>docker compose up --build</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">⏹️</div>
+                <div class="command-title">Stop All Containers</div>
+                <span class="command-badge">Essential</span>
+            </div>
+            <p class="command-description">Stop and remove all containers, networks created by up</p>
+            <div class="code-block"><code>docker compose down</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🔄</div>
+                <div class="command-title">Restart After Changes</div>
+                <span class="command-badge info">Common</span>
+            </div>
+            <p class="command-description">Full restart with rebuild (use after code/config changes)</p>
+            <div class="code-block"><code>docker compose down
+                docker compose up --build</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🔨</div>
+                <div class="command-title">Rebuild Specific Services</div>
+                <span class="command-badge">Efficient</span>
+            </div>
+            <p class="command-description">Rebuild only the services you changed (faster than full rebuild)</p>
+            <div class="code-block"><code><span class="code-comment"># Rebuild backend only</span>
+                docker compose build backend
+
+                <span class="code-comment"># Rebuild frontend only</span>
+                docker compose build frontend
+
+                <span class="code-comment"># Then restart with:</span>
+                docker compose up -d</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">📋</div>
+                <div class="command-title">List Running Containers</div>
+                <span class="command-badge info">Status Check</span>
+            </div>
+            <p class="command-description">View all running containers in the project</p>
+            <div class="code-block"><code>docker compose ps</code></div>
+        </div>
+    </div>
+
+    <!-- Monitoring Section -->
+    <div id="monitoring" class="section">
+        <h2 class="section-title">Monitoring & Debugging</h2>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">📜</div>
+                <div class="command-title">View Service Logs</div>
+                <span class="command-badge info">Debug</span>
+            </div>
+            <p class="command-description">Stream logs from specific services (-f follows logs in real-time)</p>
+            <div class="code-block"><code><span class="code-comment"># Backend logs</span>
+                docker compose logs -f backend
+
+                <span class="code-comment"># Frontend logs</span>
+                docker compose logs -f frontend
+
+                <span class="code-comment"># MongoDB logs</span>
+                docker compose logs -f mongo
+
+                <span class="code-comment"># Phoenix observability logs</span>
+                docker compose logs -f phoenix
+
+                <span class="code-comment"># All logs</span>
+                docker compose logs -f</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🗄️</div>
+                <div class="command-title">Check MongoDB Status</div>
+                <span class="command-badge success">Health Check</span>
+            </div>
+            <p class="command-description">Verify MongoDB is running and check uptime</p>
+            <div class="code-block"><code>docker compose exec mongo mongosh --eval 'db.serverStatus().uptime'</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🔌</div>
+                <div class="command-title">Check Backend API Health</div>
+                <span class="command-badge success">Health Check</span>
+            </div>
+            <p class="command-description">Test backend API and view automatic documentation</p>
+            <div class="code-block"><code>curl http://localhost:8003/docs</code></div>
+            <p class="command-description" style="margin-top:12px;">Or open in browser:</p>
+            <div class="code-block"><code>open http://localhost:8003/docs
+                <span class="code-comment"># Windows: start http://localhost:8003/docs</span>
+                <span class="code-comment"># Linux: xdg-open http://localhost:8003/docs</span></code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🖥️</div>
+                <div class="command-title">Check Frontend UI</div>
+                <span class="command-badge success">Health Check</span>
+            </div>
+            <p class="command-description">Open frontend application in browser</p>
+            <div class="code-block"><code>open http://localhost:3000
+                <span class="code-comment"># Windows: start http://localhost:3000</span>
+                <span class="code-comment"># Linux: xdg-open http://localhost:3000</span></code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">📊</div>
+                <div class="command-title">Check Phoenix Dashboard</div>
+                <span class="command-badge info">Observability</span>
+            </div>
+            <p class="command-description">Access Phoenix observability dashboard for monitoring</p>
+            <div class="code-block"><code>open http://localhost:6006
+                <span class="code-comment"># Windows: start http://localhost:6006</span>
+                <span class="code-comment"># Linux: xdg-open http://localhost:6006</span></code></div>
+        </div>
+
+        <div class="tips-section">
+            <div class="tips-header">💡 Monitoring Tips</div>
+            <ul class="tips-list">
+                <li>Use <code>docker compose logs -f service_name</code> to debug startup issues</li>
+                <li>Check logs when containers exit unexpectedly</li>
+                <li>Monitor resource usage with <code>docker stats</code></li>
+                <li>Keep Phoenix dashboard open during development for real-time insights</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Cleanup Section -->
+    <div id="cleanup" class="section">
+        <h2 class="section-title">Cleanup & Maintenance</h2>
+        <div class="savings-badge" style="display:block;text-align:center;margin-bottom:30px;">💾 Potential Savings: ~30-35 GB</div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">1</div>
+                <div class="command-title">Stop Containers</div>
+                <span class="command-badge">Required First</span>
+            </div>
+            <p class="command-description">Stop all running containers before cleanup</p>
+            <div class="code-block"><code>docker compose down</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">2</div>
+                <div class="command-title">Clean Build Cache</div>
+                <span class="command-badge success">Biggest Win</span>
+            </div>
+            <p class="command-description">Remove all build cache (typically frees ~15+ GB)</p>
+            <div class="code-block"><code>docker builder prune -af</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">3</div>
+                <div class="command-title">Remove Unused Images</div>
+                <span class="command-badge">High Impact</span>
+            </div>
+            <p class="command-description">Clean up dangling and unused images (keeps active ones)</p>
+            <div class="code-block"><code><span class="code-comment"># Remove dangling image layers</span>
+                docker image prune -f
+
+                <span class="code-comment"># Remove all unused images</span>
+                docker image prune -a -f</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">4</div>
+                <div class="command-title">Clean Containers & Networks</div>
+                <span class="command-badge info">Optional</span>
+            </div>
+            <p class="command-description">Remove stopped containers and unused networks</p>
+            <div class="code-block"><code>docker container prune -f
+                docker network prune -f</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">5</div>
+                <div class="command-title">Prune Volumes</div>
+                <span class="command-badge danger">⚠️ Data Loss</span>
+            </div>
+            <p class="command-description">Only if you can afford to lose persistent data</p>
+            <div class="warning-box">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">This will delete all data in volumes (MongoDB, PostgreSQL, uploaded files, etc.)</div>
+            </div>
+            <div class="code-block"><code><span class="code-comment"># List volumes first to see what will be deleted</span>
+                docker volume ls
+
+                <span class="code-comment"># Prune unused volumes</span>
+                docker volume prune -f</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">💣</div>
+                <div class="command-title">Nuclear Option: Clean Everything</div>
+                <span class="command-badge danger">Use Carefully</span>
+            </div>
+            <p class="command-description">Remove all unused containers, networks, images (dangling and unreferenced), and build cache</p>
+            <div class="code-block"><code>docker system prune -af</code></div>
+        </div>
+
+        <div class="result-box">
+            <div class="result-title">✅ Expected Results</div>
+            <div class="result-text">After cleanup steps 1-4: Images drop from <strong>24+ GB → single digits</strong> | Build Cache → <strong>0 GB</strong></div>
+        </div>
+
+        <div class="tips-section">
+            <div class="tips-header">🗑️ Cleanup Tips</div>
+            <ul class="tips-list">
+                <li>Run <code>docker system df</code> to check disk usage before and after cleanup</li>
+                <li>Schedule weekly cleanups to prevent disk bloat</li>
+                <li>Always stop containers before pruning</li>
+                <li>Be careful with volume pruning—you'll lose all database data</li>
+                <li>Use <code>docker image ls</code> to see what images you have before pruning</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Best Practices Section -->
+    <div id="best-practices" class="section">
+        <h2 class="section-title">Best Practices</h2>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">⚡</div>
+                <div class="command-title">Enable BuildKit</div>
+                <span class="command-badge success">Performance</span>
+            </div>
+            <p class="command-description">Enable BuildKit for faster, more efficient builds with better caching</p>
+            <div class="code-block"><code><span class="code-comment"># Add to your ~/.bashrc or ~/.zshrc</span>
+                export DOCKER_BUILDKIT=1
+                export COMPOSE_DOCKER_CLI_BUILD=1
+
+                <span class="code-comment"># Or run before each build:</span>
+                DOCKER_BUILDKIT=1 docker compose build</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">📝</div>
+                <div class="command-title">Create .dockerignore</div>
+                <span class="command-badge">Essential</span>
+            </div>
+            <p class="command-description">Prevent unnecessary files from being sent to Docker daemon</p>
+            <div class="code-block"><code><span class="code-comment"># Create .dockerignore file in project root:</span>
+                .git
+                .venv
+                venv
+                node_modules
+                .next
+                dist
+                build
+                storage
+                __pycache__
+                *.pyc
+                *.log
+                *.md
+                .DS_Store
+                .env.local
+                .idea
+                .vscode
+                coverage
+                .pytest_cache</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🔍</div>
+                <div class="command-title">Monitor Disk Usage</div>
+                <span class="command-badge info">Maintenance</span>
+            </div>
+            <p class="command-description">Regularly check Docker disk usage to prevent bloat</p>
+            <div class="code-block"><code><span class="code-comment"># Check overall Docker disk usage</span>
+                docker system df
+
+                <span class="code-comment"># Detailed breakdown with verbose output</span>
+                docker system df -v</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🏗️</div>
+                <div class="command-title">Multi-Stage Builds</div>
+                <span class="command-badge success">Image Size</span>
+            </div>
+            <p class="command-description">Use multi-stage builds to reduce final image size</p>
+            <div class="code-block"><code><span class="code-comment"># Example Dockerfile with multi-stage build</span>
+                FROM node:18 AS builder
+                WORKDIR /app
+                COPY package*.json ./
+                RUN npm ci
+                COPY . .
+                RUN npm run build
+
+                FROM node:18-alpine
+                WORKDIR /app
+                COPY --from=builder /app/dist ./dist
+                COPY --from=builder /app/node_modules ./node_modules
+                CMD ["node", "dist/index.js"]</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🚀</div>
+                <div class="command-title">Hybrid Development</div>
+                <span class="command-badge">Recommended</span>
+            </div>
+            <p class="command-description">Run services locally when possible, use Docker only for infrastructure</p>
+            <div class="code-block"><code><span class="code-comment"># Example: Run frontend + backend locally</span>
+                <span class="code-comment"># Keep only databases/services in Docker</span>
+
+                <span class="code-comment"># 1. Start only infrastructure</span>
+                docker compose up mongo phoenix
+
+                <span class="code-comment"># 2. Run backend locally</span>
+                cd backend && python main.py
+
+                <span class="code-comment"># 3. Run frontend locally</span>
+                cd frontend && npm run dev</code></div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-header">
+                <div class="command-icon">🔄</div>
+                <div class="command-title">Smart Rebuilds</div>
+                <span class="command-badge">Efficient</span>
+            </div>
+            <p class="command-description">Rebuild only what changed instead of everything</p>
+            <div class="code-block"><code><span class="code-comment"># Instead of full rebuild:</span>
+                docker compose build
+
+                <span class="code-comment"># Only rebuild specific service:</span>
+                docker compose build frontend
+                docker compose build backend
+
+                <span class="code-comment"># Use --no-cache when needed:</span>
+                docker compose build --no-cache backend</code></div>
+        </div>
+
+        <div class="tips-section">
+            <div class="tips-header">💡 Pro Tips</div>
+            <ul class="tips-list">
+                <li>Layer Dockerfile commands wisely—put things that change less frequently first</li>
+                <li>Use <code>.dockerignore</code> to speed up builds and reduce image size</li>
+                <li>Pin specific versions in Dockerfile (node:18.19.0 instead of node:latest)</li>
+                <li>Use <code>docker compose up -d</code> to run in detached mode</li>
+                <li>Create shell aliases for common commands: <code>alias dc='docker compose'</code></li>
+                <li>Schedule automated cleanups with cron or systemd timers</li>
+                <li>Keep development and production Dockerfiles separate</li>
+                <li>Use health checks in docker-compose.yml for better reliability</li>
+            </ul>
+        </div>
+
+        <div class="result-box">
+            <div class="result-title">🎯 Development Workflow</div>
+            <div class="result-text">
+                <strong>Daily:</strong> Use <code>docker compose logs -f</code> for debugging<br/>
+                <strong>Weekly:</strong> Run <code>docker system prune -f</code> to clean up<br/>
+                <strong>Monthly:</strong> Full cleanup with <code>docker system prune -af</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
